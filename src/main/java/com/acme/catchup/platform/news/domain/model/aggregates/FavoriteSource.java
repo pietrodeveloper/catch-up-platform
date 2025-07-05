@@ -1,5 +1,6 @@
 package com.acme.catchup.platform.news.domain.model.aggregates;
 
+import com.acme.catchup.platform.news.domain.model.commands.CreateFavoriteSourceCommand;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
@@ -32,4 +33,11 @@ public class FavoriteSource extends AbstractAggregateRoot<FavoriteSource> {
     @LastModifiedDate
     @Column(nullable = false)
     private Date updatedAt;
+
+    protected FavoriteSource() {}
+
+    public FavoriteSource(CreateFavoriteSourceCommand command){
+        this.newsApiKey = command.newsApiKey();
+        this.sourceId = command.sourceId();
+    }
 }
