@@ -5,6 +5,6 @@ import com.acme.catchup.platform.news.domain.model.commands.CreateFavoriteSource
 
 import java.util.Optional;
 
-public interface FavoriteCommandService {
+public interface FavoriteSourceCommandService {
     Optional<FavoriteSource> handle(CreateFavoriteSourceCommand command);
 }
