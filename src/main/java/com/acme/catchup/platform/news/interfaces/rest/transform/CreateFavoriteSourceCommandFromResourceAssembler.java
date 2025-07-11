@@ -4,7 +4,7 @@ import com.acme.catchup.platform.news.domain.model.commands.CreateFavoriteSource
 import com.acme.catchup.platform.news.interfaces.rest.resources.CreateFavoriteSourceResource;
 
 public class CreateFavoriteSourceCommandFromResourceAssembler {
-    public static CreateFavoriteSourceCommand toCommandFromResources(CreateFavoriteSourceResource resource) {
+    public static CreateFavoriteSourceCommand toCommandFromResource(CreateFavoriteSourceResource resource) {
         return new CreateFavoriteSourceCommand(resource.newsApiKey(), resource.sourceId());
     }
 }
