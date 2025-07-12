@@ -10,6 +10,7 @@ import java.util.Optional;
 @Repository
 public interface FavoriteSourceRepository extends JpaRepository<FavoriteSource, Long> {
     List<FavoriteSource> findAllByNewsApiKey(String newsApiKey);
+    List<FavoriteSource> findAllBySourceId(String sourceId);
     boolean existsByNewsApiKeyAndSourceId(String newsApiKey, String sourceId);
     Optional<FavoriteSource> findByNewsApiKeyAndSourceId(String newsApiKey, String sourceId);
 }

@@ -2,6 +2,7 @@ package com.acme.catchup.platform.news.interfaces.rest;
 
 import com.acme.catchup.platform.news.domain.model.aggregates.FavoriteSource;
 import com.acme.catchup.platform.news.domain.model.queries.GetAllFavoriteSourcesByNewsApiKeyQuery;
+import com.acme.catchup.platform.news.domain.model.queries.GetAllFavoriteSourcesBySourceIdQuery;
 import com.acme.catchup.platform.news.domain.model.queries.GetFavoriteSourceByIdQuery;
 import com.acme.catchup.platform.news.domain.model.queries.GetFavoriteSourceByNewsApiKeyAndSourceIdQuery;
 import com.acme.catchup.platform.news.domain.services.FavoriteSourceCommandService;
@@ -55,6 +56,16 @@ public class FavoriteSourcesController {
         return ResponseEntity.ok(favoriteSourceResources);
     }
 
+    private ResponseEntity<List<FavoriteSourceResource>> getAllFavoriteSourcesBySourceId(String sourceId) {
+        var getAllFavoriteSourcesBySourceIdQuery = new GetAllFavoriteSourcesBySourceIdQuery(sourceId);
+        var favoriteSources = favoriteSourceQueryService.handle(getAllFavoriteSourcesBySourceIdQuery);
+        if (favoriteSources.isEmpty()) return ResponseEntity.notFound().build();
+        var favoriteSourceResources = favoriteSources.stream()
+                .map(FavoriteSourceResourceFromEntityAssembler::toResourceFromEntity)
+                .toList();
+        return ResponseEntity.ok(favoriteSourceResources);
+    }
+
     private ResponseEntity<FavoriteSourceResource> getFavoriteSourceByNewsApiKeyAndSourceId(String newsApiKey, String sourceId) {
         var getFavoriteSourceByNewsApiKeyAndSourceIdQuery = new GetFavoriteSourceByNewsApiKeyAndSourceIdQuery(newsApiKey, sourceId);
         var favoriteSource = favoriteSourceQueryService.handle(getFavoriteSourceByNewsApiKeyAndSourceIdQuery);
@@ -70,6 +81,8 @@ public class FavoriteSourcesController {
             return getFavoriteSourceByNewsApiKeyAndSourceId(params.get("newsApiKey"), params.get("sourceId"));
         } else if (params.containsKey("newsApiKey")) {
             return getAllFavoriteSourcesByNewsApiKey(params.get("newsApiKey"));
+        } else if (params.containsKey("sourceId")) {
+            return getAllFavoriteSourcesBySourceId(params.get("sourceId"));
         } else {
             return ResponseEntity.badRequest().build();
         }
